@@ -1,10 +1,10 @@
-<RadSideDrawer>
+<RadSideDrawer class="page">
     <GridLayout rows="*" tkDrawerContent class="sideStackLayout">
-        <ListView [items]="navItems" (itemTap)="onItemTap($event)">
+        <ListView [items]="navItems" (itemTap)="onItemTap($event)" class="sideBarList">
             <template let-navItem="item">
-                <StackLayout orientation='horizontal'>
-                    <Label class="fa" [text]='navItem.icon | fonticon'></Label>
-                    <Label [text]='navItem.title'></Label>
+                <StackLayout orientation='horizontal' class="menuItem">
+                    <Label class="menuIcon fa" [text]='navItem.icon | fonticon'></Label>
+                    <Label class="menuText" [text]='navItem.title'></Label>
                 </StackLayout>
             </template>
         </ListView>
