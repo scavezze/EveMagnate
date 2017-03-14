@@ -1,20 +1,14 @@
-<RadSideDrawer tkExampleTitle tkToggleNavButton>
-    <StackLayout tkDrawerContent class="sideStackLayout">
-        <StackLayout class="sideTitleStackLayout">
-            <Label text="Navigation Menu"></Label>
-        </StackLayout>
-        <StackLayout class="sideStackLayout">
-            <Label class="fa" [text]="'fa-bluetooth' | fonticon"></Label>
-            <Label text="Primary" class="sideLabel sideLightGrayLabel"></Label>
-            <Label text="Social" class="sideLabel"></Label>
-            <Label text="Promotions" class="sideLabel"></Label>
-            <Label text="Labels" class="sideLabel sideLightGrayLabel"></Label>
-            <Label text="Important" class="sideLabel"></Label>
-            <Label text="Starred" class="sideLabel"></Label>
-            <Label text="Sent Mail" class="sideLabel"></Label>
-            <Label text="Drafts" class="sideLabel"></Label>
-        </StackLayout>
-    </StackLayout>
+<RadSideDrawer>
+    <GridLayout rows="*" tkDrawerContent class="sideStackLayout">
+        <ListView [items]="navItems" (itemTap)="onItemTap($event)">
+            <template let-navItem="item">
+                <StackLayout orientation='horizontal'>
+                    <Label class="fa" [text]='navItem.icon | fonticon'></Label>
+                    <Label [text]='navItem.title'></Label>
+                </StackLayout>
+            </template>
+        </ListView>
+    </GridLayout>
     <StackLayout tkMainContent>
            <ng-content></ng-content>
     </StackLayout>
