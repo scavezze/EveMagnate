@@ -4,6 +4,7 @@ import { NativeScriptModule } from "nativescript-angular/nativescript.module";
 import { CommonModule } from '../common/common.module';
 
 import { MainComponent } from "./components/main/main.component";
+import { MailComponent } from "./components/mail/mail.component";
 
 @NgModule({
     imports: [
@@ -11,7 +12,8 @@ import { MainComponent } from "./components/main/main.component";
         CommonModule
     ],
     declarations: [
-        MainComponent
+        MainComponent,
+        MailComponent
     ],
     providers: [
     ]

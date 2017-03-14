@@ -1,15 +1,19 @@
-<RadSideDrawer class="page">
+<RadSideDrawer #menuDrawer drawerLocation="Right">
     <GridLayout rows="*" tkDrawerContent class="sideStackLayout">
         <ListView [items]="navItems" (itemTap)="onItemTap($event)" class="sideBarList">
             <template let-navItem="item">
                 <StackLayout orientation='horizontal' class="menuItem">
-                    <Label class="menuIcon fa" [text]='navItem.icon | fonticon'></Label>
+                    <Label class="menuIcon fa" [text]='navItem.icon | fonticonPure'></Label>
                     <Label class="menuText" [text]='navItem.title'></Label>
                 </StackLayout>
             </template>
         </ListView>
     </GridLayout>
-    <StackLayout tkMainContent>
+    <StackLayout tkMainContent class="page">
+            <ActionBar [title]="title" icon="" class="action-bar">
+                <NavigationButton text="Back" android.systemIcon="ic_menu_back" (tap)="onNavBtnTap()"></NavigationButton>
+                <ActionItem class="fa" (tap)="openMenu()" ios.position="right" text='Menu' android.position="actionBar"></ActionItem>
+            </ActionBar>
            <ng-content></ng-content>
     </StackLayout>
 </RadSideDrawer>

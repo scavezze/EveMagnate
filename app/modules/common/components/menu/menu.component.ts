@@ -1,5 +1,5 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { Router } from "@angular/router";
+import { Component, OnInit, ChangeDetectionStrategy, Input } from '@angular/core';
+import { RouterExtensions  } from "nativescript-angular/router";
 import { MenuItem } from './menuItem';
 import { NavPaths } from '../../../../app.routing';
 
@@ -13,19 +13,26 @@ import { NavPaths } from '../../../../app.routing';
 
 export class MenuComponent implements OnInit {
 	public navItems: Array<MenuItem>;
+	@Input() title: string;
 
-	constructor(private router: Router) {
+	constructor(private routerExtension: RouterExtensions) {
 		this.navItems = [
 			new MenuItem('fa-home', 'Home', NavPaths.main),
-			new MenuItem('fa-bluetooth', 'Login', NavPaths.main),
-			new MenuItem('fa-home', 'Home', NavPaths.main),
-			new MenuItem('fa-bluetooth', 'Sign Out', NavPaths.login)
+			new MenuItem('fa-envelope', 'Mail', NavPaths.mail)
 		]
 	}
 
 	onItemTap(args) {
 		var item = this.navItems[args.index];
-		this.router.navigate([item.destination]);
+		this.routerExtension.navigate([item.destination]);
+	}
+
+	onNavBtnTap() {
+		this.routerExtension.backToPreviousPage();
+	}
+
+	openMenu() {
+		
 	}
 
 	ngOnInit() { }

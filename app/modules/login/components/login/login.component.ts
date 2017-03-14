@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from "@angular/router";
+import { RouterExtensions  } from "nativescript-angular/router";
 import { Page } from "ui/page";
 
 @Component({
@@ -11,13 +11,13 @@ import { Page } from "ui/page";
 
 export class LoginComponent implements OnInit {
 
-	constructor(private router: Router,  private page: Page) { }
+	constructor(private routerExtension: RouterExtensions,  private page: Page) { }
 
 	ngOnInit() { 
 		this.page.actionBarHidden = true;
 	}
 
 	login() {
-		this.router.navigate(["/main"]);
+		this.routerExtension.navigate(["/main"]);
 	}
 }
