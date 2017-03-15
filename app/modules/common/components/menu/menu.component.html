@@ -12,7 +12,7 @@
     <StackLayout tkMainContent class="page">
             <ActionBar [title]="title" icon="" class="action-bar">
                 <NavigationButton text="Back" android.systemIcon="ic_menu_back" (tap)="onNavBtnTap()"></NavigationButton>
-                <ActionItem class="fa" (tap)="openMenu()" ios.position="right" text='Menu' android.position="actionBar"></ActionItem>
+                <ActionItem class="fa" (tap)="openMenu()" ios.position="right" android.position="actionBar" icon="res://hamburger"></ActionItem>
             </ActionBar>
            <ng-content></ng-content>
     </StackLayout>

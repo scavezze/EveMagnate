@@ -18,6 +18,6 @@ export class LoginComponent implements OnInit {
 	}
 
 	login() {
-		this.routerExtension.navigate(["/main"]);
+		this.routerExtension.navigate(["/main"], { clearHistory: true });
 	}
 }

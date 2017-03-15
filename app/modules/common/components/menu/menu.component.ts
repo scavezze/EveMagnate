@@ -1,7 +1,9 @@
-import { Component, OnInit, ChangeDetectionStrategy, Input } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, Input, ViewChild, AfterViewInit } from '@angular/core';
 import { RouterExtensions  } from "nativescript-angular/router";
+import { RadSideDrawerComponent, SideDrawerType } from "nativescript-telerik-ui/sidedrawer/angular";
 import { MenuItem } from './menuItem';
 import { NavPaths } from '../../../../app.routing';
+import { Page } from "ui/page";
 
 @Component({
 	selector: 'menu',
@@ -14,8 +16,10 @@ import { NavPaths } from '../../../../app.routing';
 export class MenuComponent implements OnInit {
 	public navItems: Array<MenuItem>;
 	@Input() title: string;
+	@ViewChild("menuDrawer") menuDrawer: RadSideDrawerComponent
+	private _drawer: SideDrawerType;
 
-	constructor(private routerExtension: RouterExtensions) {
+	constructor(private routerExtension: RouterExtensions,  private page: Page) {
 		this.navItems = [
 			new MenuItem('fa-home', 'Home', NavPaths.main),
 			new MenuItem('fa-envelope', 'Mail', NavPaths.mail)
@@ -32,8 +36,16 @@ export class MenuComponent implements OnInit {
 	}
 
 	openMenu() {
-		
+		 this._drawer.toggleDrawerState();
 	}
 
-	ngOnInit() { }
+	ngOnInit() {
+		if(!this.routerExtension.canGoBackToPreviousPage()) {
+			this.page.actionBar.navigationButton.visibility = 'collapsed';
+		}
+	 }
+
+	ngAfterViewInit() {
+		this._drawer = this.menuDrawer.sideDrawer;
+	}
 }
