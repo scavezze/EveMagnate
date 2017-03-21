@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterExtensions  } from "nativescript-angular/router";
 import { Page } from "ui/page";
+import { LoginService } from '../../../eveApi/services/login.service';
+import { handleOpenURL, AppURL } from '../../../common/urlHandler/urlHandler';
 
 @Component({
 	selector: 'login',
@@ -11,13 +13,17 @@ import { Page } from "ui/page";
 
 export class LoginComponent implements OnInit {
 
-	constructor(private routerExtension: RouterExtensions,  private page: Page) { }
+	constructor(private routerExtension: RouterExtensions,  private page: Page, private loginService: LoginService) {
+		handleOpenURL((appURL: AppURL) => {
+			console.log('Got the following appURL', appURL);
+		});
+	 }
 
 	ngOnInit() { 
 		this.page.actionBarHidden = true;
 	}
 
 	login() {
-		this.routerExtension.navigate(["/main"], { clearHistory: true });
+		this.loginService.loginToEveApi();
 	}
 }

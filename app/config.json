@@ -1,0 +1,8 @@
+{
+    "EveApi": {
+        "SSOEndPoint": "https://login.eveonline.com",
+        "redirectUri": "evemagnate://auth/",
+        "clientId": "e9b91538e5cb4c4f9d04db609a0bf3b3",
+        "scope": "publicData characterNavigationWrite characterAssetsRead characterIndustryJobsRead characterMarketOrdersRead characterResearchRead corporationAssetsRead corporationIndustryJobsRead esi-skills.read_skills.v1 esi-wallet.read_character_wallet.v1 esi-assets.read_assets.v1"
+    }
+}
