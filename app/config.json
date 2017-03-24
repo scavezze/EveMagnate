@@ -3,6 +3,7 @@
         "SSOEndPoint": "https://login.eveonline.com",
         "redirectUri": "evemagnate://auth/",
         "clientId": "e9b91538e5cb4c4f9d04db609a0bf3b3",
+        "secret": "Zg09y54c7TbyhQAZ6sx2BGSvOWFwXsh6V81PKZH2",
         "scope": "publicData characterNavigationWrite characterAssetsRead characterIndustryJobsRead characterMarketOrdersRead characterResearchRead corporationAssetsRead corporationIndustryJobsRead esi-skills.read_skills.v1 esi-wallet.read_character_wallet.v1 esi-assets.read_assets.v1"
     }
 }
