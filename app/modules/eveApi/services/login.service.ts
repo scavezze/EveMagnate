@@ -63,6 +63,10 @@ export class LoginService {
         .catch(this.handleErrors);   
     }
 
+    getToken() {
+        return this.authData["access_token"];
+    }
+
     handleErrors(error: Response) {
         console.log(JSON.stringify(error.json()));
         return Observable.throw(error);
