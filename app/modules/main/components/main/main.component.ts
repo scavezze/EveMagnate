@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { LoginService } from '../../../eveApi/services/login.service';
 
 @Component({
 	selector: 'main',
@@ -9,7 +10,14 @@ import { Component, OnInit } from '@angular/core';
 
 export class MainComponent implements OnInit {
 
-	constructor() { }
+	constructor(private loginService: LoginService) { 	
+		this.loginService.getCharacters().subscribe(
+			(data) => {
+				console.log(JSON.stringify(data));
+			},() => alert("Unfortunately we were unable to retrive characters"));
+	}
 
-	ngOnInit() { }
+	ngOnInit() {
+
+	}
 }

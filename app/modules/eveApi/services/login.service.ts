@@ -12,6 +12,7 @@ var config = require('../../../config.json');
 @Injectable()
 export class LoginService {
     state: String;
+    authData: Object;
 
     constructor(private http: Http) {}
 
@@ -27,7 +28,6 @@ export class LoginService {
     }
 
     verifyAuthCode(authCode: String, state: String) {
-        console.log("Code: " + authCode + " State: " + state + " == " + this.state);
         if(state !== this.state) {
             return Observable.throw("INVALID State Token.");
         }
@@ -43,10 +43,24 @@ export class LoginService {
         )
         .map(res => res.json())
         .map(data => {
-            console.log(JSON.stringify(data));    
+            this.authData = data; 
         })
-        .catch(this.handleErrors);
-          
+        .catch(this.handleErrors);   
+    }
+
+    getCharacters() {
+        let headers = new Headers();
+        headers.append("Authorization", this.authData["token_type"] + " " + this.authData["access_token"]);
+ 
+        return this.http.get(
+            config.EveApi.SSOEndPoint + "/oauth/verify",
+            { headers: headers }
+        )
+        .map(res => res.json())
+        .map(data => {
+            return data;
+        })
+        .catch(this.handleErrors);   
     }
 
     handleErrors(error: Response) {
