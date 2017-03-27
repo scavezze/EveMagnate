@@ -48,6 +48,8 @@
 		<dict>
 			<key>CFBundleURLName</key>
 			<string>org.nativescript.EveMagnate</string>
+		</dict>
+		<dict>
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>evemagnate</string>

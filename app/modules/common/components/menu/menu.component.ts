@@ -22,7 +22,8 @@ export class MenuComponent implements OnInit {
 	constructor(private routerExtension: RouterExtensions,  private page: Page) {
 		this.navItems = [
 			new MenuItem('fa-home', 'Home', NavPaths.main),
-			new MenuItem('fa-envelope', 'Mail', NavPaths.mail)
+			new MenuItem('fa-envelope', 'Mail', NavPaths.mail),
+			new MenuItem('fa-envelope', 'Logout', NavPaths.login)
 		]
 	}
 

@@ -4,6 +4,7 @@ import { Page } from "ui/page";
 import { LoginService } from '../../../eveApi/services/login.service';
 import { handleOpenURL, AppURL } from 'nativescript-urlhandler'
 import { NavPaths } from '../../../../app.routing';
+import * as application from "application";
 
 @Component({
 	selector: 'login',
@@ -16,6 +17,15 @@ export class LoginComponent implements OnInit {
 
 	constructor(private routerExtension: RouterExtensions,  private page: Page, private loginService: LoginService, private zone: NgZone) {
 		handleOpenURL((appURL: AppURL) => {
+			if (application.ios) {
+				let vc = application.ios.rootController 
+				while(vc.presentedViewController != null) {
+					vc = vc.presentedViewController;
+				}
+
+				vc.dismissViewControllerAnimatedCompletion(true, null);
+			}
+
 			this.loginService.verifyAuthCode(appURL.params.get("code"), appURL.params.get("state")).subscribe(
 				() => {
 					this.zone.run(
