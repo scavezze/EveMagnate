@@ -13,15 +13,15 @@ import { SkillsApi } from '../../../eveApi/eveSwaggerApi';
 export class MainComponent implements OnInit {
 
 	constructor(private loginService: LoginService, private skillsApi: SkillsApi) { 	
-		this.loginService.getCharacters().subscribe(
-			(data) => {
-				skillsApi.getCharactersCharacterIdSkills(data["CharacterID"], "tranquility", loginService.getToken(), "eveMagnate").subscribe(
-					(json) => {
-						console.log(JSON.stringify(json));
-					},() => alert("Unfortunately we were unable to retrive characters")
-				);
-			},() => alert("Unfortunately we were unable to retrive characters")
-		);
+		// this.loginService.getCharacters().subscribe(
+		// 	(data) => {
+		// 		skillsApi.getCharactersCharacterIdSkills(data["CharacterID"], "tranquility", loginService.getToken(), "eveMagnate").subscribe(
+		// 			(json) => {
+		// 				console.log(JSON.stringify(json));
+		// 			},() => alert("Unfortunately we were unable to retrive characters")
+		// 		);
+		// 	},() => alert("Unfortunately we were unable to retrive characters")
+		// );
 	}
 
 	ngOnInit() {

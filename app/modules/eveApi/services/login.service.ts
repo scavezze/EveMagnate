@@ -3,18 +3,25 @@ import { Http, Headers, Response } from "@angular/http";
 import { Observable } from "rxjs/Rx";
 import "rxjs/add/operator/do";
 import "rxjs/add/operator/map";
+import "rxjs/add/operator/mergeMap";
 import * as AdvancedWebView from 'nativescript-advanced-webview';
 import { UUID } from 'angular2-uuid';
 import * as base64 from 'base-64';
+import { Couchbase } from "nativescript-couchbase";
+import { Account } from '../model';
 
 var config = require('../../../config.json');
 
 @Injectable()
 export class LoginService {
     state: String;
-    authData: Object;
+    currentAccount: Account;
+    private database: any;
 
-    constructor(private http: Http) {}
+
+    constructor(private http: Http) {
+        this.database = new Couchbase("data");
+    }
 
     loginToEveApi() {
         this.state = UUID.UUID();
@@ -42,34 +49,44 @@ export class LoginService {
             { headers: headers }
         )
         .map(res => res.json())
-        .map(data => {
-            this.authData = data; 
-        })
-        .catch(this.handleErrors);   
+        .map(this.handleVerifyToken.bind(this))
+        .flatMap(data => this.refreshCharacters(data as Account))
+        .catch(this.handleErrors)   
     }
 
-    getCharacters() {
+    refreshCharacters(authData: Account) {
         let headers = new Headers();
-        headers.append("Authorization", this.authData["token_type"] + " " + this.authData["access_token"]);
+        headers.append("Authorization", authData.token_type + " " + authData.access_token);
  
         return this.http.get(
             config.EveApi.SSOEndPoint + "/oauth/verify",
             { headers: headers }
         )
         .map(res => res.json())
-        .map(data => {
-            return data;
-        })
+        .map(this.handleRefreshCharacters.bind(this))
         .catch(this.handleErrors);   
     }
 
     getToken() {
-        return this.authData["access_token"];
+        return this.currentAccount.access_token;
     }
 
     handleErrors(error: Response) {
         console.log(JSON.stringify(error.json()));
         return Observable.throw(error);
+    }
+
+    private handleVerifyToken(data) {
+        let account = data as Account;
+        account.selectedAccount = true;
+        let documentId = this.database.createDocument(data as Account);
+        account = this.database.getDocument(documentId) as Account;
+        this.currentAccount = account
+        return account;
+    }
+
+    private handleRefreshCharacters(data) {
+        console.log(JSON.stringify(data));
     }
 
     private getAuthHeader() {
