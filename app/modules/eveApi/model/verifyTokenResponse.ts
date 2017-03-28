@@ -1,6 +1,4 @@
-export interface Account {
-    _id: number;
-
+export interface VerifyTokenResponse {
     access_token: string;
 
     token_type: string;
@@ -8,6 +6,4 @@ export interface Account {
     expires_in: number;
   
     refresh_token: string;
-
-    selectedAccount: boolean;
 }

@@ -8,19 +8,40 @@ import * as AdvancedWebView from 'nativescript-advanced-webview';
 import { UUID } from 'angular2-uuid';
 import * as base64 from 'base-64';
 import { Couchbase } from "nativescript-couchbase";
-import { Account } from '../model';
+import { Character, VerifyTokenResponse, GetCharacterResponse } from '../model';
 
 var config = require('../../../config.json');
 
 @Injectable()
 export class LoginService {
     state: String;
-    currentAccount: Account;
+    currentCharacter: Character;
     private database: any;
+    private tempCharacter: Character;
 
 
     constructor(private http: Http) {
         this.database = new Couchbase("data");
+        this.database.createView("currentCharacter", "1", function(document: Character, emitter) {
+            if(document.selectedAccount) {
+                emitter.emit(document._id, document);
+            }
+        });
+    }
+
+    init() {
+        var rows = this.database.executeQuery("currentCharacter");
+        if(rows.length > 0) {
+            this.currentCharacter = rows[0];
+        }
+    }
+
+    loggedIn() {
+        if(this.currentCharacter) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     loginToEveApi() {
@@ -50,13 +71,13 @@ export class LoginService {
         )
         .map(res => res.json())
         .map(this.handleVerifyToken.bind(this))
-        .flatMap(data => this.refreshCharacters(data as Account))
+        .flatMap(data => this.refreshCharacters(data as Character))
         .catch(this.handleErrors)   
     }
 
-    refreshCharacters(authData: Account) {
+    refreshCharacters(character: Character) {
         let headers = new Headers();
-        headers.append("Authorization", authData.token_type + " " + authData.access_token);
+        headers.append("Authorization", character.token_type + " " + character.access_token);
  
         return this.http.get(
             config.EveApi.SSOEndPoint + "/oauth/verify",
@@ -67,8 +88,8 @@ export class LoginService {
         .catch(this.handleErrors);   
     }
 
-    getToken() {
-        return this.currentAccount.access_token;
+    getCurrentCharacter() {
+        return this.currentCharacter;
     }
 
     handleErrors(error: Response) {
@@ -76,17 +97,33 @@ export class LoginService {
         return Observable.throw(error);
     }
 
-    private handleVerifyToken(data) {
-        let account = data as Account;
-        account.selectedAccount = true;
-        let documentId = this.database.createDocument(data as Account);
-        account = this.database.getDocument(documentId) as Account;
-        this.currentAccount = account
-        return account;
+    private handleVerifyToken(data: VerifyTokenResponse) {
+        this.tempCharacter = new Character();
+        this.tempCharacter.access_token = data.access_token;
+        this.tempCharacter.expires_in = data.expires_in;
+        this.tempCharacter.refresh_token = data.refresh_token;
+        this.tempCharacter.token_type = data.token_type;
+        return this.tempCharacter;
     }
 
-    private handleRefreshCharacters(data) {
-        console.log(JSON.stringify(data));
+    private handleRefreshCharacters(data: GetCharacterResponse) {
+        this.tempCharacter.CharacterID = data.CharacterID;
+        this.tempCharacter.CharacterName = data.CharacterName;
+        this.tempCharacter.ExpiresOn = data.ExpiresOn;
+        this.tempCharacter.Scopes = data.Scopes;
+        this.tempCharacter.TokenType = data.TokenType;
+        this.tempCharacter.CharacterOwnerHash = data.CharacterOwnerHash;
+        this.tempCharacter.IntellectualProperty = data.IntellectualProperty;
+        this.tempCharacter.selectedAccount = true;
+        this.tempCharacter._id = this.database.createDocument(this.tempCharacter);
+
+        if(this.currentCharacter){
+            this.currentCharacter.selectedAccount = false;
+            this.database.updateDocument(this.currentCharacter._id, this.currentCharacter);
+        }
+
+        this.currentCharacter = this.tempCharacter;
+        this.tempCharacter = null;
     }
 
     private getAuthHeader() {
