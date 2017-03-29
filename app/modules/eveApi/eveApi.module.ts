@@ -3,6 +3,7 @@ import { NativeScriptHttpModule } from "nativescript-angular/http";
 import { NativeScriptModule } from "nativescript-angular/nativescript.module";
 
 import { LoginService } from './services/login.service';
+import { EveImageService } from './services/eveImage.service';
 
 @NgModule({
     schemas: [NO_ERRORS_SCHEMA],
@@ -15,7 +16,8 @@ import { LoginService } from './services/login.service';
     declarations: [
     ],
     providers: [
-        LoginService
+        LoginService,
+        EveImageService
     ]
 })
 export class EveApiModule { }

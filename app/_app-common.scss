@@ -18,3 +18,11 @@
 .page {
   color: #fff;
 }
+
+.card {
+  padding: 10 10 10 10;
+
+  GridLayout {
+    background-color: rgba($background, .7);
+  }
+}
