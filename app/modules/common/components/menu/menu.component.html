@@ -1,12 +1,12 @@
 <RadSideDrawer #menuDrawer drawerLocation="Right">
     <GridLayout rows="*" tkDrawerContent class="sideStackLayout">
         <ListView [items]="navItems" (itemTap)="onItemTap($event)" class="sideBarList">
-            <template let-navItem="item">
+            <ng-template let-navItem="item">
                 <StackLayout orientation='horizontal' class="menuItem">
-                    <Label class="menuIcon fa" [text]='navItem.icon | fonticonPure'></Label>
+                    <Label class="menuIcon fa" [text]='navItem.icon'></Label>
                     <Label class="menuText" [text]='navItem.title'></Label>
                 </StackLayout>
-            </template>
+            </ng-template>
         </ListView>
     </GridLayout>
     <StackLayout tkMainContent class="page">
