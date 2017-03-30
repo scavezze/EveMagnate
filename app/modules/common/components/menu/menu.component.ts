@@ -13,7 +13,7 @@ import { Page } from "ui/page";
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class MenuComponent implements OnInit {
+export class MenuComponent implements OnInit, AfterViewInit {
 	public navItems: Array<MenuItem>;
 	@Input() title: string;
 	@ViewChild("menuDrawer") menuDrawer: RadSideDrawerComponent
