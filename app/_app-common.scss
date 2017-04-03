@@ -24,5 +24,15 @@
 
   GridLayout {
     background-color: rgba($background, .7);
+
+    GridLayout {
+      background-color: transparent;
+    }
   }
+}
+
+.label {
+    padding-bottom: 5;
+    font-weight: bold;
+    color: $accent;
 }

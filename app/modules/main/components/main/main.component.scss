@@ -2,7 +2,11 @@
     padding: 8;
 
     Image {
-        padding: 0 10 10 0;
+        margin-right: 10;
         background-color: transparent;
+    }
+
+    .label {
+        padding-bottom: 5;
     }
 }

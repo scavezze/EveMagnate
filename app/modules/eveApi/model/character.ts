@@ -1,3 +1,5 @@
+import * as moment from 'moment';
+
 export class Character {
     _id: number;
 
@@ -5,7 +7,7 @@ export class Character {
 
     token_type: string;
 
-    expires_in: number;
+    expires_in: moment.Moment;
   
     refresh_token: string;
 

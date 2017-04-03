@@ -9,6 +9,7 @@ import { UUID } from 'angular2-uuid';
 import * as base64 from 'base-64';
 import { Couchbase } from "nativescript-couchbase";
 import { Character, VerifyTokenResponse, GetCharacterResponse } from '../model';
+import * as moment from 'moment';
 
 var config = require('../../../config.json');
 
@@ -72,7 +73,7 @@ export class LoginService {
         .map(res => res.json())
         .map(this.handleVerifyToken.bind(this))
         .flatMap(data => this.refreshCharacters(data as Character))
-        .catch(this.handleErrors)   
+        .catch(this.handleErrors);  
     }
 
     refreshCharacters(character: Character) {
@@ -100,7 +101,7 @@ export class LoginService {
     private handleVerifyToken(data: VerifyTokenResponse) {
         this.tempCharacter = new Character();
         this.tempCharacter.access_token = data.access_token;
-        this.tempCharacter.expires_in = data.expires_in;
+        this.tempCharacter.expires_in = moment().add((data.expires_in - 60), 's');
         this.tempCharacter.refresh_token = data.refresh_token;
         this.tempCharacter.token_type = data.token_type;
         return this.tempCharacter;
