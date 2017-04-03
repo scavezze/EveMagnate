@@ -93,7 +93,18 @@ export class LoginService {
         return this.currentCharacter;
     }
 
-    handleErrors(error: Response) {
+    getToken() {
+         return new Promise((resolve, reject) => {
+            if(this.currentCharacter.expires_in.isAfter(moment())) {
+                resolve(this.currentCharacter.access_token);
+            } else {
+                //TODO get token using refresh token
+                reject("nope");
+            }
+         });
+    }
+
+    private handleErrors(error: Response) {
         console.log(JSON.stringify(error.json()));
         return Observable.throw(error);
     }

@@ -42,14 +42,7 @@ export class MainComponent implements OnInit {
 			//TODO handler errors
     	);
 
-		this.walletApi.getCharactersCharacterIdWallets(this.character.CharacterID, 'tranquility', this.character.access_token).subscribe(
-			(walletData: GetCharactersCharacterIdWallets200Ok) => {
-				this.walletInfo = walletData;
-			},(error)=>{
-				console.log(JSON.stringify(error));
-			}
-			//TODO handler errors
-    	);
+		this.getWalletInfo();
 	}
 
 	private getImages() {
@@ -94,5 +87,20 @@ export class MainComponent implements OnInit {
 				//TODO handler errors
 			);
 		}
+	}
+
+	private getWalletInfo () {
+		this.loginService.getToken().then((token: string)=>{
+			this.walletApi.getCharactersCharacterIdWallets(this.character.CharacterID, 'tranquility', token).subscribe(
+				(walletData: GetCharactersCharacterIdWallets200Ok) => {
+					this.walletInfo = walletData[0];
+				},(error)=>{
+					console.log(JSON.stringify(error));
+				}
+				//TODO handler errors
+			);
+		},(error)=>{
+			alert("Cannot retrive api data at this time");
+		});
 	}
 }
