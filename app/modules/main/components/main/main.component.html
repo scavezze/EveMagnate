@@ -18,7 +18,7 @@
             </StackLayout>
             <!-- row 2 -->
             <GridLayout row="2" col="0" colSpan="3" rows="auto" columns="*, *">
-                <Label [text]="walletInfo?.balance | currency:'USD':true" row="0" col="0" textWrap="true"></Label>
+                <Label [text]="walletInfo?.balance | isk" row="0" col="0" textWrap="true"></Label>
                 <!--<Label text="Alliance2" row="0" col="1" textWrap="true"></Label>-->
             </GridLayout>
         </GridLayout>

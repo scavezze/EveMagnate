@@ -94,19 +94,45 @@ export class LoginService {
     }
 
     getToken() {
-         return new Promise((resolve, reject) => {
-            if(this.currentCharacter.expires_in.isAfter(moment())) {
+         return new Promise(this.getTokenPromise.bind(this));
+    } 
+
+    private getTokenPromise(resolve, reject) {
+        if(this.currentCharacter.expires_in.isAfter(moment())) {
                 resolve(this.currentCharacter.access_token);
-            } else {
-                //TODO get token using refresh token
-                reject("nope");
-            }
-         });
+        } else {
+            let headers = new Headers();
+            headers.append("Authorization", "Basic " + this.getAuthHeader());
+            headers.append("Content-Type", "application/x-www-form-urlencoded");
+    
+            this.http.post(
+                config.EveApi.SSOEndPoint + "/oauth/token",
+                "grant_type=refresh_token&refresh_token=" + this.currentCharacter.refresh_token,
+                { headers: headers }
+            )
+            .map(res => res.json())
+            .map(this.updateVerifyToken.bind(this))
+            .catch(this.handleErrors).subscribe(
+                () => {
+                    resolve(this.currentCharacter.access_token)
+                },
+                (error) => {
+                    reject(error);
+                }
+            );
+        }
     }
 
     private handleErrors(error: Response) {
         console.log(JSON.stringify(error.json()));
         return Observable.throw(error);
+    }
+
+     private updateVerifyToken(data) {
+        this.currentCharacter.access_token = data.access_token;
+        this.currentCharacter.expires_in = moment().add((data.expires_in - 60), 's');
+        this.currentCharacter.refresh_token = data.refresh_token;
+        this.database.updateDocument(this.currentCharacter._id, this.currentCharacter);
     }
 
     private handleVerifyToken(data: VerifyTokenResponse) {
