@@ -98,7 +98,7 @@ export class LoginService {
     } 
 
     private getTokenPromise(resolve, reject) {
-        if(this.currentCharacter.expires_in.isAfter(moment())) {
+        if(moment.utc(this.currentCharacter.expires_in).isAfter(moment().utc())) {
                 resolve(this.currentCharacter.access_token);
         } else {
             let headers = new Headers();
@@ -130,7 +130,7 @@ export class LoginService {
 
      private updateVerifyToken(data) {
         this.currentCharacter.access_token = data.access_token;
-        this.currentCharacter.expires_in = moment().add((data.expires_in - 60), 's');
+        this.currentCharacter.expires_in = moment().utc().add((data.expires_in - 60), 's').toISOString();
         this.currentCharacter.refresh_token = data.refresh_token;
         this.database.updateDocument(this.currentCharacter._id, this.currentCharacter);
     }
@@ -138,7 +138,7 @@ export class LoginService {
     private handleVerifyToken(data: VerifyTokenResponse) {
         this.tempCharacter = new Character();
         this.tempCharacter.access_token = data.access_token;
-        this.tempCharacter.expires_in = moment().add((data.expires_in - 60), 's');
+        this.tempCharacter.expires_in = moment().utc().add((data.expires_in - 60), 's').toISOString();
         this.tempCharacter.refresh_token = data.refresh_token;
         this.tempCharacter.token_type = data.token_type;
         return this.tempCharacter;
