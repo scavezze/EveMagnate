@@ -3,8 +3,8 @@ import { Image } from "ui/image";
 import * as imageSource from 'image-source';
 import { LoginService } from '../../../eveApi/services/login.service';
 import { EveImageService, Sizes } from '../../../eveApi/services/eveImage.service';
-import { CharacterApi, AllianceApi, CorporationApi, WalletApi } from '../../../eveApi/eveSwaggerApi/api/api';
-import { GetCharactersCharacterIdOk, GetCorporationsCorporationIdOk, GetAlliancesAllianceIdOk, GetCharactersCharacterIdWallets200Ok } from '../../../eveApi/eveSwaggerApi/model/models';
+import { CharacterApi, AllianceApi, CorporationApi, WalletApi, SkillsApi } from '../../../eveApi/eveSwaggerApi/api/api';
+import { GetCharactersCharacterIdOk, GetCorporationsCorporationIdOk, GetAlliancesAllianceIdOk, GetCharactersCharacterIdWallets200Ok, GetCharactersCharacterIdSkillqueue200Ok } from '../../../eveApi/eveSwaggerApi/model/models';
 import { Character } from '../../../eveApi/model';
 
 @Component({
@@ -12,7 +12,7 @@ import { Character } from '../../../eveApi/model';
 	moduleId: module.id,
 	templateUrl: './main.component.html',
 	styleUrls: ['./main.component.css'],
-	providers: [CharacterApi, CorporationApi, AllianceApi, WalletApi]
+	providers: [CharacterApi, CorporationApi, AllianceApi, WalletApi, SkillsApi]
 })
 
 export class MainComponent implements OnInit {
@@ -21,13 +21,14 @@ export class MainComponent implements OnInit {
 	corpInfo: GetCorporationsCorporationIdOk;
 	allianceInfo: GetAlliancesAllianceIdOk;
 	walletInfo: GetCharactersCharacterIdWallets200Ok;
+	skills: Array<Object> = [];
 
 	@ViewChild("characterImage") characterImage: ElementRef 
 	@ViewChild("corpImage") corpImage: ElementRef
 	@ViewChild("allianceImage") allianceImage: ElementRef
 
 	constructor(private loginService: LoginService, private eveImageService: EveImageService, private characterApi: CharacterApi, 
-				private corporationApi: CorporationApi, private allianceApi: AllianceApi, private walletApi: WalletApi) { 	
+				private corporationApi: CorporationApi, private allianceApi: AllianceApi, private walletApi: WalletApi, private skillsApi: SkillsApi) { 	
 		this.character = this.loginService.currentCharacter;
 	}
 
@@ -43,6 +44,7 @@ export class MainComponent implements OnInit {
     	);
 
 		this.getWalletInfo();
+		this.getSkillQueue();
 	}
 
 	private getImages() {
@@ -94,6 +96,21 @@ export class MainComponent implements OnInit {
 			this.walletApi.getCharactersCharacterIdWallets(this.character.CharacterID, 'tranquility', token).subscribe(
 				(walletData: GetCharactersCharacterIdWallets200Ok) => {
 					this.walletInfo = walletData[0];
+				},(error)=>{
+					console.log(JSON.stringify(error));
+				}
+				//TODO handler errors
+			);
+		},(error)=>{
+			alert("Cannot retrive api data at this time");
+		});
+	}
+
+	private getSkillQueue() {
+		this.loginService.getToken().then((token: string)=>{
+			this.skillsApi.getCharactersCharacterIdSkillqueue(this.character.CharacterID, 'tranquility', token).subscribe(
+				(skillsData: Array<GetCharactersCharacterIdSkillqueue200Ok>) => {
+					this.skills = skillsData;
 				},(error)=>{
 					console.log(JSON.stringify(error));
 				}

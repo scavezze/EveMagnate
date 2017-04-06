@@ -44,7 +44,7 @@
 				<category android:name="android.intent.category.DEFAULT" />
 				<category android:name="android.intent.category.BROWSABLE" />
 
-				<data android:scheme="evemagnate"
+				<data android:scheme="eveauth-evemagnate"
 					  android:host="auth"
 					  />
 			</intent-filter>

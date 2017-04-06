@@ -22,17 +22,26 @@
 .card {
   padding: 10 10 10 10;
 
-  GridLayout {
+  .card-content {
     background-color: rgba($background, .7);
 
-    GridLayout {
+    GridLayout, StackLayout {
       background-color: transparent;
     }
   }
 }
 
 .label {
-    padding-bottom: 5;
-    font-weight: bold;
-    color: $accent;
+  padding-bottom: 5;
+  font-weight: bold;
+  color: $accent;
+}
+
+.gridHeader {
+  margin-top: 10;
+  background-color: $background;
+}
+
+.no-margin {
+  margin: 0;
 }

@@ -1,8 +1,9 @@
 <menu title="Character Profile">
     <StackLayout class="card">
-        <Label [text]="character?.CharacterName" textWrap="true" horizontalAlignment="center"></Label>
-        
-        <GridLayout class="character-summary" rows="55, 55, auto" columns="110, 55, *" height="auto">
+        <StackLayout class="gridHeader no-margin">
+            <Label [text]="character?.CharacterName" textWrap="true" horizontalAlignment="center"></Label>
+        </StackLayout>
+        <GridLayout class="character-summary card-content" rows="55, 55, auto" columns="110, 55, *" height="auto">
             <!-- row 0 -->
             <Image #characterImage row="0" col="0" rowSpan="2" ></Image>
             <Image #corpImage row="0" col="1" ></Image>
@@ -22,5 +23,15 @@
                 <!--<Label text="Alliance2" row="0" col="1" textWrap="true"></Label>-->
             </GridLayout>
         </GridLayout>
+
+        <StackLayout class="gridHeader">
+            <Label text="Skill Queue" textWrap="true" horizontalAlignment="center"></Label>
+        </StackLayout>
+        <StackLayout class="card-content">
+            <StackLayout *ngFor="let skill of skills">
+                <Label text="Test" textWrap="true"></Label>
+            </StackLayout>
+        </StackLayout>
+
     </StackLayout>
 </menu>

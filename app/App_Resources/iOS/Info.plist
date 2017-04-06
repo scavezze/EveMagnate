@@ -52,7 +52,7 @@
 		<dict>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>evemagnate</string>
+				<string>eveauth-evemagnate</string>
 			</array>
 		</dict>
 	</array>
